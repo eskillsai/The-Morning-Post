@@ -51,15 +51,71 @@ foreach ($record in @($records)) {
     }
 }
 $posts = @($byDate.Values | Sort-Object Date -Descending)
-if ($posts.Count -eq 0) {
-    $items = '      <li class="empty">No archived posts yet.</li>'
-} else {
-    $items = foreach ($post in $posts) {
-        $href = [System.Uri]::EscapeDataString($post.FileName)
-        $label = [System.Net.WebUtility]::HtmlEncode($post.Date.ToString('MMMM d, yyyy', $culture))
-        "      <li><a href=`"$href`"><span>$label</span><span class=`"read`">Read post</span></a></li>"
+$monthMarkup = ''
+$latestHref = ''
+$latestLabel = ''
+$editionCount = $posts.Count
+if ($editionCount -gt 0) {
+    $latest = $posts[0]
+    $latestHref = [System.Uri]::EscapeDataString($latest.FileName)
+    $latestLabel = [System.Net.WebUtility]::HtmlEncode($latest.Date.ToString('MMMM d, yyyy', $culture))
+    $monthLines = [System.Collections.Generic.List[string]]::new()
+    $monthGroups = @($posts | Group-Object { $_.Date.ToString('yyyy-MM', $culture) })
+    $monthIndex = 0
+
+    foreach ($monthGroup in $monthGroups) {
+        $monthPosts = @($monthGroup.Group | Sort-Object Date -Descending)
+        $monthDate = $monthPosts[0].Date
+        $monthLabel = $monthDate.ToString('MMMM yyyy', $culture)
+        $monthId = 'month-' + $monthDate.ToString('yyyy-MM', $culture)
+        $monthCount = $monthPosts.Count
+        $countLabel = if ($monthCount -eq 1) { '1 edition' } else { "$monthCount editions" }
+        $expanded = if ($monthIndex -eq 0) { 'true' } else { 'false' }
+
+        $monthLines.Add('    <section class="archive-month">')
+        $monthLines.Add("      <h2 class=`"archive-month-heading`"><button class=`"archive-month-toggle`" type=`"button`" aria-expanded=`"$expanded`" aria-controls=`"$monthId`"><span class=`"archive-month-name`">$monthLabel</span><span class=`"archive-month-count`">$countLabel</span><span class=`"archive-month-chevron`" aria-hidden=`"true`"></span></button></h2>")
+        $hidden = if ($expanded -eq 'true') { '' } else { ' hidden' }
+        $monthLines.Add("      <ul class=`"archive-days`" id=`"$monthId`"$hidden>")
+
+        foreach ($post in $monthPosts) {
+            $href = [System.Uri]::EscapeDataString($post.FileName)
+            $dateIso = $post.Date.ToString('yyyy-MM-dd', $culture)
+            $dateLabel = [System.Net.WebUtility]::HtmlEncode($post.Date.ToString('MMMM d, yyyy', $culture))
+            $weekday = [System.Net.WebUtility]::HtmlEncode($post.Date.ToString('ddd', $culture))
+            $dayNumber = $post.Date.ToString('dd', $culture)
+            $current = if ($post.FileName -eq $latest.FileName) { ' aria-current="page"' } else { '' }
+            $monthLines.Add("        <li><a class=`"archive-day`" href=`"$href`" data-iso=`"$dateIso`" data-title=`"$dateLabel`" aria-label=`"$dateLabel edition`"$current><span class=`"archive-day-date`"><span class=`"archive-day-number`">$dayNumber</span><span class=`"archive-day-weekday`">$weekday</span></span><span class=`"archive-day-action`">Read <span aria-hidden=`"true`">&rarr;</span></span></a></li>")
+        }
+
+        $monthLines.Add('      </ul>')
+        $monthLines.Add('    </section>')
+        $monthIndex++
     }
-    $items = $items -join "`r`n"
+    $monthMarkup = $monthLines -join "`r`n"
+}
+
+$editionCountLabel = if ($editionCount -eq 1) { '1 archived edition' } else { "$editionCount archived editions" }
+if ($editionCount -gt 0) {
+    $viewerMarkup = @"
+      <section class="archive-viewer" aria-labelledby="edition-title">
+        <div class="archive-viewer-heading">
+          <div>
+            <p class="archive-viewer-kicker">Selected edition</p>
+            <h2 id="edition-title">$latestLabel</h2>
+            <p class="archive-viewer-meta" id="edition-meta">Daily AI briefing &middot; $latestLabel</p>
+          </div>
+          <a class="archive-open-link" id="open-edition" href="$latestHref" target="_blank" rel="noopener noreferrer">Open full edition <span aria-hidden="true">&#8599;</span></a>
+        </div>
+        <div class="archive-frame-wrap"><iframe class="archive-frame" id="archive-frame" src="$latestHref" title="$latestLabel - The Morning Post" scrolling="no"></iframe></div>
+      </section>
+"@
+} else {
+    $viewerMarkup = @"
+      <section class="archive-viewer" aria-labelledby="edition-title">
+        <div class="archive-viewer-heading"><div><p class="archive-viewer-kicker">Archive library</p><h2 id="edition-title">No editions yet</h2><p class="archive-viewer-meta">Daily editions will appear here when published.</p></div></div>
+        <div class="archive-empty-reader"><span aria-hidden="true">MP</span><p>There are no archived editions to display yet.</p></div>
+      </section>
+"@
 }
 
 $page = @"
@@ -68,42 +124,107 @@ $page = @"
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Archives - eSkillsAI Morning Post</title>
+  <meta name="description" content="Browse past editions of The Morning Post by month and date.">
+  <title>The Morning Post Archives | eSkillsAI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
+  <link rel="stylesheet" href="../site.css?v=20261102-3">
   <link rel="alternate" type="application/rss+xml" title="The Morning Post RSS" href="../feed.xml">
-  <style>
-    :root{color-scheme:light;--bg:#EEF0F8;--panel:#fff;--ink:#1B1E3A;--muted:#5A5F7D;--line:#DDE0EE;--acc:#7B2CFF}
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Manrope,system-ui,-apple-system,'Segoe UI',Arial,sans-serif}
-    main{width:min(760px,calc(100% - 32px));margin:40px auto}
-    .back{display:inline-block;margin-bottom:24px;color:var(--acc);font-weight:700;text-decoration:none}
-    .back:hover{text-decoration:underline}
-    header,.archive-list{background:var(--panel);border:1px solid var(--line);border-radius:16px}
-    header{padding:28px 32px;margin-bottom:18px}
-    .brand{margin:0 0 8px;color:var(--muted);font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-    h1{margin:0;font-size:clamp(32px,7vw,48px);line-height:1.1}
-    header p:last-child{margin:12px 0 0;color:var(--muted)}
-    .archive-list{list-style:none;margin:0;padding:0;overflow:hidden}
-    .archive-list li+li{border-top:1px solid var(--line)}
-    .archive-list a{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px;color:var(--ink);font-weight:700;text-decoration:none}
-    .archive-list a:hover{background:#F6F3FF;color:var(--acc)}
-    .read{color:var(--acc);font-size:13px;white-space:nowrap}
-    .empty{padding:22px;color:var(--muted)}
-    @media(prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#070921;--panel:#12163F;--ink:#E8EAFB;--muted:#A3A8CF;--line:#272C63;--acc:#B99BFF}.archive-list a:hover{background:#1B2054}}
-  </style>
 </head>
-<body>
-  <main>
-    <a class="back" href="../">&larr; Today's Morning Post</a>
-    <header>
-      <p class="brand">eSkillsAI Morning Post</p>
-      <h1>Archives</h1>
-      <p>Browse previous daily posts.</p>
-    </header>
-    <ol class="archive-list">
-$items
-    </ol>
+<body class="archive-body">
+  <main class="archive-shell">
+    <div class="archive-topline">
+      <a class="archive-brand" href="../" aria-label="The Morning Post home"><span class="archive-brand-mark" aria-hidden="true">MP</span><span><strong>The Morning Post</strong><small>by eSkillsAI</small></span></a>
+      <a class="archive-return" href="../"><span aria-hidden="true">&larr;</span> Today's edition</a>
+    </div>
+    <section class="archive-intro" aria-labelledby="archive-title">
+      <p class="archive-eyebrow">The Morning Post &middot; Reading room</p>
+      <h1 id="archive-title">Explore the archive</h1>
+      <p>Browse daily AI briefings by month. Choose a date to read that edition here.</p>
+    </section>
+    <div class="archive-layout">
+      <aside class="archive-sidebar" aria-label="Archive navigation">
+        <div class="archive-sidebar-heading"><div><p class="archive-sidebar-title">Browse by month</p><p class="archive-sidebar-count">$editionCountLabel</p></div><span class="archive-calendar-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M7.5 3.5v3M16.5 3.5v3M3.5 9.5h17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span></div>
+        <nav class="archive-months" aria-label="Archive months">
+$(if ($editionCount -gt 0) { $monthMarkup } else { '          <p class="archive-no-posts">No archived editions yet.</p>' })
+        </nav>
+      </aside>
+$viewerMarkup
+    </div>
+    <footer class="archive-footer"><span>The Morning Post by eSkillsAI</span><a href="../feed.xml">RSS feed</a></footer>
   </main>
+  <script>
+    (function(){
+      const frame=document.getElementById('archive-frame');
+      const links=Array.from(document.querySelectorAll('.archive-day'));
+      if(!links.length)return;
+      const title=document.getElementById('edition-title');
+      const meta=document.getElementById('edition-meta');
+      const openLink=document.getElementById('open-edition');
+      let resizeObserver=null;
+      function fitFrame(){
+        try{
+          const doc=frame.contentDocument;
+          if(!doc)return;
+          doc.documentElement.style.backgroundColor='#fff';
+          if(doc.body)doc.body.style.backgroundColor='#fff';
+          const card=doc.querySelector('.card');
+          const preview=doc.querySelector('#pvh');
+          const scroll=doc.defaultView?doc.defaultView.scrollY:0;
+          const cardBottom=card?card.getBoundingClientRect().bottom+scroll:0;
+          const previewBottom=preview?preview.getBoundingClientRect().bottom+scroll:0;
+          const height=Math.max(doc.documentElement.scrollHeight,doc.body?doc.body.scrollHeight:0,cardBottom,previewBottom);
+          frame.style.height=Math.max(820,height+32)+'px';
+        }catch(e){}
+      }
+      function watchFrame(){
+        fitFrame();
+        try{
+          const doc=frame.contentDocument;
+          if(resizeObserver)resizeObserver.disconnect();
+          if(doc&&'ResizeObserver' in window){
+            resizeObserver=new ResizeObserver(fitFrame);
+            resizeObserver.observe(doc.documentElement);
+            const card=doc.querySelector('.card');
+            if(card)resizeObserver.observe(card);
+          }
+          if(doc&&doc.fonts&&doc.fonts.ready)doc.fonts.ready.then(fitFrame);
+        }catch(e){}
+      }
+      function selectEdition(link,updateHash){
+        const src=link.href;
+        title.textContent=link.dataset.title;
+        meta.textContent='Daily AI briefing | '+link.dataset.title;
+        openLink.href=src;
+        frame.title=link.dataset.title+' - The Morning Post';
+        links.forEach(function(item){if(item===link)item.setAttribute('aria-current','page');else item.removeAttribute('aria-current');});
+        const month=link.closest('.archive-month');
+        const days=link.closest('.archive-days');
+        const toggle=month?month.querySelector('.archive-month-toggle'):null;
+        if(toggle)toggle.setAttribute('aria-expanded','true');
+        if(days)days.hidden=false;
+        if(frame.src!==src)frame.src=src;
+        if(updateHash)history.replaceState(null,'','#'+link.dataset.iso);
+      }
+      document.querySelectorAll('.archive-month-toggle').forEach(function(toggle){
+        toggle.addEventListener('click',function(){
+          const expanded=toggle.getAttribute('aria-expanded')==='true';
+          const days=document.getElementById(toggle.getAttribute('aria-controls'));
+          toggle.setAttribute('aria-expanded',String(!expanded));
+          if(days)days.hidden=expanded;
+        });
+      });
+      links.forEach(function(link){link.addEventListener('click',function(event){event.preventDefault();selectEdition(link,true);});});
+      let initial=null;
+      try{const requested=decodeURIComponent(location.hash.slice(1));initial=links.find(function(link){return link.dataset.iso===requested;})||null;}catch(e){}
+      initial=initial||links.find(function(link){return link.getAttribute('aria-current')==='page';})||links[0];
+      selectEdition(initial,false);
+      frame.addEventListener('load',watchFrame);
+      window.addEventListener('resize',fitFrame);
+      setTimeout(watchFrame,500);
+    })();
+  </script>
 </body>
 </html>
 "@
