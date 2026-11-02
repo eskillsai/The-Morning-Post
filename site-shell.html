@@ -41,15 +41,25 @@
           if(!doc)return;
           doc.documentElement.style.backgroundColor='#fff';
           if(doc.body)doc.body.style.backgroundColor='#fff';
-          const height=Math.max(doc.documentElement.scrollHeight,doc.body?doc.body.scrollHeight:0);
-          frame.style.height=Math.max(800,height+24)+'px';
+          const card=doc.querySelector('.card');
+          const preview=doc.querySelector('#pvh');
+          const pageScroll=doc.defaultView?doc.defaultView.scrollY:0;
+          const cardBottom=card?card.getBoundingClientRect().bottom+pageScroll:0;
+          const previewBottom=preview?preview.getBoundingClientRect().bottom+pageScroll:0;
+          const height=Math.max(doc.documentElement.scrollHeight,doc.body?doc.body.scrollHeight:0,cardBottom,previewBottom);
+          frame.style.height=Math.max(800,height+32)+'px';
         }catch(e){}
       }
       frame.addEventListener('load',function(){
         fit();
         try{
           const doc=frame.contentDocument;
-          if('ResizeObserver' in window){new ResizeObserver(fit).observe(doc.documentElement);}
+          if('ResizeObserver' in window){
+            const observer=new ResizeObserver(fit);
+            observer.observe(doc.documentElement);
+            const card=doc.querySelector('.card');
+            if(card)observer.observe(card);
+          }
           if(doc.fonts&&doc.fonts.ready){doc.fonts.ready.then(fit);}
         }catch(e){}
         setTimeout(fit,500);
