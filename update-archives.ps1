@@ -149,20 +149,19 @@ $page = @"
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
-  <link rel="stylesheet" href="../site.css?v=20261102-4">
+  <link rel="stylesheet" href="../site.css?v=20261102-5">
   <link rel="alternate" type="application/rss+xml" title="The Morning Post RSS" href="../feed.xml">
 </head>
 <body class="archive-body">
   <main class="archive-shell">
     <div class="archive-topline">
-      <a class="archive-brand" href="../" aria-label="The Morning Post home"><span class="archive-brand-mark" aria-hidden="true">MP</span><span><strong>The Morning Post</strong><small>by eSkillsAI</small></span></a>
+      <a class="archive-brand" href="../" aria-label="The Morning Post home"><span class="archive-brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M21 27a11 11 0 0 1 22 0M32 5v7M17 11l4 7M47 11l-4 7M8 25l8 2M56 25l-8 2" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/><path d="M7 32c9-3 18-1 25 5v20c-7-6-16-8-25-5V32Zm50 0c-9-3-18-1-25 5v20c7-6 16-8 25-5V32Z" fill="rgba(255,255,255,.08)" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/><path d="M13 38c6-1 11 0 15 3M13 45c6-1 11 0 15 3M51 38c-6-1-11 0-15 3M51 45c-6-1-11 0-15 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span><strong>The Morning Post</strong><small>by eSkillsAI</small></span></a>
+      <section class="archive-intro" aria-labelledby="archive-title">
+        <h1 id="archive-title">Explore the archive</h1>
+        <p>Browse daily briefings by year, month, and date.</p>
+      </section>
       <a class="archive-return" href="../"><span aria-hidden="true">&larr;</span> Today's edition</a>
     </div>
-    <section class="archive-intro" aria-labelledby="archive-title">
-      <p class="archive-eyebrow">The Morning Post &middot; Reading room</p>
-      <h1 id="archive-title">Explore the archive</h1>
-      <p>Browse daily AI briefings by year, month, and date. Choose a date to read that edition here.</p>
-    </section>
     <div class="archive-layout">
       <aside class="archive-sidebar" aria-label="Archive navigation">
         <div class="archive-sidebar-heading"><div><p class="archive-sidebar-title">Browse by Date</p><p class="archive-sidebar-count">$editionCountLabel</p></div><span class="archive-calendar-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M7.5 3.5v3M16.5 3.5v3M3.5 9.5h17M8 13h.01M12 13h.01M16 13h.01M8 16.5h.01M12 16.5h.01M16 16.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span></div>
