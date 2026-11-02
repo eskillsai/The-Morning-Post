@@ -11,27 +11,27 @@
   <link rel="alternate" type="application/rss+xml" title="The Morning Post RSS" href="./feed.xml">
 </head>
 <body>
-  <header class="site-header">
+  <header class="site-header home-site-header">
     <div class="site-wrap">
-      <a class="brand" href="./">eSkillsAI</a>
-      <div class="hero">
-        <p class="eyebrow">Daily AI advancement news</p>
+      <div class="home-title-row">
         <h1>The Morning Post</h1>
-        <p class="hero-copy">A daily look at the latest developments in artificial intelligence.</p>
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="./about.html">About</a>
+          <a class="subscribe-link" href="./subscribe.html">Subscribe</a>
+          <a href="./archives/">Archives</a>
+        </nav>
       </div>
-      <nav class="site-nav" aria-label="Main navigation">
-        <a href="./about.html">About</a>
-        <a class="subscribe-link" href="./subscribe.html">Subscribe</a>
-        <a href="./archives/">Archives</a>
-      </nav>
+      <p class="hero-copy">A daily look at the latest developments in artificial intelligence.</p>
     </div>
   </header>
-  <main class="edition" id="today">
-    <div class="edition-heading"><span>Today's edition</span><span>eSkillsAI Morning Post</span></div>
-    <iframe class="post-frame" id="daily-post" src="./archives/The%20Morning%20post_2026-11-02.html" title="Today's Morning Post" scrolling="no"></iframe>
-    <noscript><p>JavaScript is needed to size the daily post correctly. <a href="./today.html">Open today's post</a>.</p></noscript>
-  </main>
-  <footer class="site-footer">The Morning Post by eSkillsAI | <a href="./archives/">Past editions</a> | <a href="./feed.xml">RSS feed</a></footer>
+  <div class="home-content-surface">
+    <main class="edition" id="today">
+      <div class="edition-heading"><span>Today's edition</span><span>eSkillsAI Morning Post</span></div>
+      <iframe class="post-frame" id="daily-post" src="./archives/The%20Morning%20post_2026-11-02.html" title="Today's Morning Post" scrolling="no"></iframe>
+      <noscript><p>JavaScript is needed to size the daily post correctly. <a href="./today.html">Open today's post</a>.</p></noscript>
+    </main>
+    <footer class="site-footer">The Morning Post by eSkillsAI | <a href="./archives/">Past editions</a> | <a href="./feed.xml">RSS feed</a></footer>
+  </div>
   <script>
     (function(){
       const frame=document.getElementById('daily-post');
@@ -39,6 +39,8 @@
         try{
           const doc=frame.contentDocument;
           if(!doc)return;
+          doc.documentElement.style.backgroundColor='#fff';
+          if(doc.body)doc.body.style.backgroundColor='#fff';
           const height=Math.max(doc.documentElement.scrollHeight,doc.body?doc.body.scrollHeight:0);
           frame.style.height=Math.max(800,height+24)+'px';
         }catch(e){}
