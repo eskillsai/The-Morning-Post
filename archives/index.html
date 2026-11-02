@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
-  <link rel="stylesheet" href="../site.css?v=20261102-3">
+  <link rel="stylesheet" href="../site.css?v=20261102-4">
   <link rel="alternate" type="application/rss+xml" title="The Morning Post RSS" href="../feed.xml">
 </head>
 <body class="archive-body">
@@ -20,18 +20,23 @@
     <section class="archive-intro" aria-labelledby="archive-title">
       <p class="archive-eyebrow">The Morning Post &middot; Reading room</p>
       <h1 id="archive-title">Explore the archive</h1>
-      <p>Browse daily AI briefings by month. Choose a date to read that edition here.</p>
+      <p>Browse daily AI briefings by year, month, and date. Choose a date to read that edition here.</p>
     </section>
     <div class="archive-layout">
       <aside class="archive-sidebar" aria-label="Archive navigation">
-        <div class="archive-sidebar-heading"><div><p class="archive-sidebar-title">Browse by month</p><p class="archive-sidebar-count">2 archived editions</p></div><span class="archive-calendar-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M7.5 3.5v3M16.5 3.5v3M3.5 9.5h17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span></div>
-        <nav class="archive-months" aria-label="Archive months">
-    <section class="archive-month">
-      <h2 class="archive-month-heading"><button class="archive-month-toggle" type="button" aria-expanded="true" aria-controls="month-2026-11"><span class="archive-month-name">November 2026</span><span class="archive-month-count">2 editions</span><span class="archive-month-chevron" aria-hidden="true"></span></button></h2>
-      <ul class="archive-days" id="month-2026-11">
-        <li><a class="archive-day" href="The%20Morning%20post_Nov%202%202026.html" data-iso="2026-11-02" data-title="November 2, 2026" aria-label="November 2, 2026 edition" aria-current="page"><span class="archive-day-date"><span class="archive-day-number">02</span><span class="archive-day-weekday">Mon</span></span><span class="archive-day-action">Read <span aria-hidden="true">&rarr;</span></span></a></li>
-        <li><a class="archive-day" href="eskillsai%20Morning%20Post%20Studio%20%E2%80%94%20Nov%201%202026.html" data-iso="2026-11-01" data-title="November 1, 2026" aria-label="November 1, 2026 edition"><span class="archive-day-date"><span class="archive-day-number">01</span><span class="archive-day-weekday">Sun</span></span><span class="archive-day-action">Read <span aria-hidden="true">&rarr;</span></span></a></li>
-      </ul>
+        <div class="archive-sidebar-heading"><div><p class="archive-sidebar-title">Browse by Date</p><p class="archive-sidebar-count">2 archived editions</p></div><span class="archive-calendar-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M7.5 3.5v3M16.5 3.5v3M3.5 9.5h17M8 13h.01M12 13h.01M16 13h.01M8 16.5h.01M12 16.5h.01M16 16.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span></div>
+        <nav class="archive-date-nav" aria-label="Archive by year, month and date">
+    <section class="archive-year">
+      <h2 class="archive-year-heading"><button class="archive-year-toggle" type="button" aria-expanded="true" aria-controls="year-2026"><span class="archive-year-name">2026</span><span class="archive-year-count">1 month</span><span class="archive-year-chevron" aria-hidden="true"></span></button></h2>
+      <div class="archive-year-months" id="year-2026">
+        <section class="archive-month">
+          <h3 class="archive-month-heading"><button class="archive-month-toggle" type="button" aria-expanded="true" aria-controls="month-2026-11"><span class="archive-month-name">November</span><span class="archive-month-count">2 editions</span><span class="archive-month-chevron" aria-hidden="true"></span></button></h3>
+          <ul class="archive-days" id="month-2026-11">
+            <li><a class="archive-day" href="The%20Morning%20post_Nov%202%202026.html" data-iso="2026-11-02" data-title="November 2, 2026" aria-label="November 2, 2026 edition" aria-current="page"><span class="archive-day-date"><span class="archive-day-number">02</span><span class="archive-day-weekday">Mon</span></span><span class="archive-day-action">Read <span aria-hidden="true">&rarr;</span></span></a></li>
+            <li><a class="archive-day" href="eskillsai%20Morning%20Post%20Studio%20%E2%80%94%20Nov%201%202026.html" data-iso="2026-11-01" data-title="November 1, 2026" aria-label="November 1, 2026 edition"><span class="archive-day-date"><span class="archive-day-number">01</span><span class="archive-day-weekday">Sun</span></span><span class="archive-day-action">Read <span aria-hidden="true">&rarr;</span></span></a></li>
+          </ul>
+        </section>
+      </div>
     </section>
         </nav>
       </aside>
@@ -94,6 +99,11 @@
         openLink.href=src;
         frame.title=link.dataset.title+' - The Morning Post';
         links.forEach(function(item){if(item===link)item.setAttribute('aria-current','page');else item.removeAttribute('aria-current');});
+        const year=link.closest('.archive-year');
+        const yearMonths=link.closest('.archive-year-months');
+        const yearToggle=year?year.querySelector('.archive-year-toggle'):null;
+        if(yearToggle)yearToggle.setAttribute('aria-expanded','true');
+        if(yearMonths)yearMonths.hidden=false;
         const month=link.closest('.archive-month');
         const days=link.closest('.archive-days');
         const toggle=month?month.querySelector('.archive-month-toggle'):null;
@@ -102,7 +112,7 @@
         if(frame.src!==src)frame.src=src;
         if(updateHash)history.replaceState(null,'','#'+link.dataset.iso);
       }
-      document.querySelectorAll('.archive-month-toggle').forEach(function(toggle){
+      document.querySelectorAll('.archive-year-toggle, .archive-month-toggle').forEach(function(toggle){
         toggle.addEventListener('click',function(){
           const expanded=toggle.getAttribute('aria-expanded')==='true';
           const days=document.getElementById(toggle.getAttribute('aria-controls'));

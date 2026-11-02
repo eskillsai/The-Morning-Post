@@ -51,7 +51,7 @@ foreach ($record in @($records)) {
     }
 }
 $posts = @($byDate.Values | Sort-Object Date -Descending)
-$monthMarkup = ''
+$dateNavMarkup = ''
 $latestHref = ''
 $latestLabel = ''
 $editionCount = $posts.Count
@@ -59,39 +59,59 @@ if ($editionCount -gt 0) {
     $latest = $posts[0]
     $latestHref = [System.Uri]::EscapeDataString($latest.FileName)
     $latestLabel = [System.Net.WebUtility]::HtmlEncode($latest.Date.ToString('MMMM d, yyyy', $culture))
-    $monthLines = [System.Collections.Generic.List[string]]::new()
-    $monthGroups = @($posts | Group-Object { $_.Date.ToString('yyyy-MM', $culture) })
-    $monthIndex = 0
+    $dateLines = [System.Collections.Generic.List[string]]::new()
+    $yearGroups = @($posts | Group-Object { $_.Date.ToString('yyyy', $culture) })
+    $yearIndex = 0
 
-    foreach ($monthGroup in $monthGroups) {
-        $monthPosts = @($monthGroup.Group | Sort-Object Date -Descending)
-        $monthDate = $monthPosts[0].Date
-        $monthLabel = $monthDate.ToString('MMMM yyyy', $culture)
-        $monthId = 'month-' + $monthDate.ToString('yyyy-MM', $culture)
-        $monthCount = $monthPosts.Count
-        $countLabel = if ($monthCount -eq 1) { '1 edition' } else { "$monthCount editions" }
-        $expanded = if ($monthIndex -eq 0) { 'true' } else { 'false' }
+    foreach ($yearGroup in $yearGroups) {
+        $yearPosts = @($yearGroup.Group | Sort-Object Date -Descending)
+        $year = $yearPosts[0].Date.ToString('yyyy', $culture)
+        $yearId = 'year-' + $year
+        $months = @($yearPosts | Group-Object { $_.Date.ToString('yyyy-MM', $culture) })
+        $yearCount = $months.Count
+        $yearCountLabel = if ($yearCount -eq 1) { '1 month' } else { "$yearCount months" }
+        $yearExpanded = if ($yearIndex -eq 0) { 'true' } else { 'false' }
 
-        $monthLines.Add('    <section class="archive-month">')
-        $monthLines.Add("      <h2 class=`"archive-month-heading`"><button class=`"archive-month-toggle`" type=`"button`" aria-expanded=`"$expanded`" aria-controls=`"$monthId`"><span class=`"archive-month-name`">$monthLabel</span><span class=`"archive-month-count`">$countLabel</span><span class=`"archive-month-chevron`" aria-hidden=`"true`"></span></button></h2>")
-        $hidden = if ($expanded -eq 'true') { '' } else { ' hidden' }
-        $monthLines.Add("      <ul class=`"archive-days`" id=`"$monthId`"$hidden>")
+        $dateLines.Add('    <section class="archive-year">')
+        $dateLines.Add("      <h2 class=`"archive-year-heading`"><button class=`"archive-year-toggle`" type=`"button`" aria-expanded=`"$yearExpanded`" aria-controls=`"$yearId`"><span class=`"archive-year-name`">$year</span><span class=`"archive-year-count`">$yearCountLabel</span><span class=`"archive-year-chevron`" aria-hidden=`"true`"></span></button></h2>")
+        $yearHidden = if ($yearExpanded -eq 'true') { '' } else { ' hidden' }
+        $dateLines.Add("      <div class=`"archive-year-months`" id=`"$yearId`"$yearHidden>")
+        $monthIndex = 0
 
-        foreach ($post in $monthPosts) {
-            $href = [System.Uri]::EscapeDataString($post.FileName)
-            $dateIso = $post.Date.ToString('yyyy-MM-dd', $culture)
-            $dateLabel = [System.Net.WebUtility]::HtmlEncode($post.Date.ToString('MMMM d, yyyy', $culture))
-            $weekday = [System.Net.WebUtility]::HtmlEncode($post.Date.ToString('ddd', $culture))
-            $dayNumber = $post.Date.ToString('dd', $culture)
-            $current = if ($post.FileName -eq $latest.FileName) { ' aria-current="page"' } else { '' }
-            $monthLines.Add("        <li><a class=`"archive-day`" href=`"$href`" data-iso=`"$dateIso`" data-title=`"$dateLabel`" aria-label=`"$dateLabel edition`"$current><span class=`"archive-day-date`"><span class=`"archive-day-number`">$dayNumber</span><span class=`"archive-day-weekday`">$weekday</span></span><span class=`"archive-day-action`">Read <span aria-hidden=`"true`">&rarr;</span></span></a></li>")
+        foreach ($monthGroup in $months) {
+            $monthPosts = @($monthGroup.Group | Sort-Object Date -Descending)
+            $monthDate = $monthPosts[0].Date
+            $monthLabel = $monthDate.ToString('MMMM', $culture)
+            $monthId = 'month-' + $monthDate.ToString('yyyy-MM', $culture)
+            $monthCount = $monthPosts.Count
+            $countLabel = if ($monthCount -eq 1) { '1 edition' } else { "$monthCount editions" }
+            $monthExpanded = if ($yearIndex -eq 0 -and $monthIndex -eq 0) { 'true' } else { 'false' }
+
+            $dateLines.Add('        <section class="archive-month">')
+            $dateLines.Add("          <h3 class=`"archive-month-heading`"><button class=`"archive-month-toggle`" type=`"button`" aria-expanded=`"$monthExpanded`" aria-controls=`"$monthId`"><span class=`"archive-month-name`">$monthLabel</span><span class=`"archive-month-count`">$countLabel</span><span class=`"archive-month-chevron`" aria-hidden=`"true`"></span></button></h3>")
+            $monthHidden = if ($monthExpanded -eq 'true') { '' } else { ' hidden' }
+            $dateLines.Add("          <ul class=`"archive-days`" id=`"$monthId`"$monthHidden>")
+
+            foreach ($post in $monthPosts) {
+                $href = [System.Uri]::EscapeDataString($post.FileName)
+                $dateIso = $post.Date.ToString('yyyy-MM-dd', $culture)
+                $dateLabel = [System.Net.WebUtility]::HtmlEncode($post.Date.ToString('MMMM d, yyyy', $culture))
+                $weekday = [System.Net.WebUtility]::HtmlEncode($post.Date.ToString('ddd', $culture))
+                $dayNumber = $post.Date.ToString('dd', $culture)
+                $current = if ($post.FileName -eq $latest.FileName) { ' aria-current="page"' } else { '' }
+                $dateLines.Add("            <li><a class=`"archive-day`" href=`"$href`" data-iso=`"$dateIso`" data-title=`"$dateLabel`" aria-label=`"$dateLabel edition`"$current><span class=`"archive-day-date`"><span class=`"archive-day-number`">$dayNumber</span><span class=`"archive-day-weekday`">$weekday</span></span><span class=`"archive-day-action`">Read <span aria-hidden=`"true`">&rarr;</span></span></a></li>")
+            }
+
+            $dateLines.Add('          </ul>')
+            $dateLines.Add('        </section>')
+            $monthIndex++
         }
 
-        $monthLines.Add('      </ul>')
-        $monthLines.Add('    </section>')
-        $monthIndex++
+        $dateLines.Add('      </div>')
+        $dateLines.Add('    </section>')
+        $yearIndex++
     }
-    $monthMarkup = $monthLines -join "`r`n"
+    $dateNavMarkup = $dateLines -join "`r`n"
 }
 
 $editionCountLabel = if ($editionCount -eq 1) { '1 archived edition' } else { "$editionCount archived editions" }
@@ -129,7 +149,7 @@ $page = @"
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
-  <link rel="stylesheet" href="../site.css?v=20261102-3">
+  <link rel="stylesheet" href="../site.css?v=20261102-4">
   <link rel="alternate" type="application/rss+xml" title="The Morning Post RSS" href="../feed.xml">
 </head>
 <body class="archive-body">
@@ -141,13 +161,13 @@ $page = @"
     <section class="archive-intro" aria-labelledby="archive-title">
       <p class="archive-eyebrow">The Morning Post &middot; Reading room</p>
       <h1 id="archive-title">Explore the archive</h1>
-      <p>Browse daily AI briefings by month. Choose a date to read that edition here.</p>
+      <p>Browse daily AI briefings by year, month, and date. Choose a date to read that edition here.</p>
     </section>
     <div class="archive-layout">
       <aside class="archive-sidebar" aria-label="Archive navigation">
-        <div class="archive-sidebar-heading"><div><p class="archive-sidebar-title">Browse by month</p><p class="archive-sidebar-count">$editionCountLabel</p></div><span class="archive-calendar-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M7.5 3.5v3M16.5 3.5v3M3.5 9.5h17" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span></div>
-        <nav class="archive-months" aria-label="Archive months">
-$(if ($editionCount -gt 0) { $monthMarkup } else { '          <p class="archive-no-posts">No archived editions yet.</p>' })
+        <div class="archive-sidebar-heading"><div><p class="archive-sidebar-title">Browse by Date</p><p class="archive-sidebar-count">$editionCountLabel</p></div><span class="archive-calendar-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M7.5 3.5v3M16.5 3.5v3M3.5 9.5h17M8 13h.01M12 13h.01M16 13h.01M8 16.5h.01M12 16.5h.01M16 16.5h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span></div>
+        <nav class="archive-date-nav" aria-label="Archive by year, month and date">
+$(if ($editionCount -gt 0) { $dateNavMarkup } else { '          <p class="archive-no-posts">No archived editions yet.</p>' })
         </nav>
       </aside>
 $viewerMarkup
@@ -199,6 +219,11 @@ $viewerMarkup
         openLink.href=src;
         frame.title=link.dataset.title+' - The Morning Post';
         links.forEach(function(item){if(item===link)item.setAttribute('aria-current','page');else item.removeAttribute('aria-current');});
+        const year=link.closest('.archive-year');
+        const yearMonths=link.closest('.archive-year-months');
+        const yearToggle=year?year.querySelector('.archive-year-toggle'):null;
+        if(yearToggle)yearToggle.setAttribute('aria-expanded','true');
+        if(yearMonths)yearMonths.hidden=false;
         const month=link.closest('.archive-month');
         const days=link.closest('.archive-days');
         const toggle=month?month.querySelector('.archive-month-toggle'):null;
@@ -207,7 +232,7 @@ $viewerMarkup
         if(frame.src!==src)frame.src=src;
         if(updateHash)history.replaceState(null,'','#'+link.dataset.iso);
       }
-      document.querySelectorAll('.archive-month-toggle').forEach(function(toggle){
+      document.querySelectorAll('.archive-year-toggle, .archive-month-toggle').forEach(function(toggle){
         toggle.addEventListener('click',function(){
           const expanded=toggle.getAttribute('aria-expanded')==='true';
           const days=document.getElementById(toggle.getAttribute('aria-controls'));
