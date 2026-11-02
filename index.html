@@ -19,6 +19,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Manrope',system
 .app{display:grid;grid-template-columns:minmax(300px,420px) minmax(0,1fr);gap:20px;max-width:1500px;margin:0 auto;padding:16px}
 @media (max-width:900px){.app{grid-template-columns:minmax(0,1fr)}}
 .tools{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.archive-link{display:inline-flex;align-items:center;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px 18px;font-weight:700;text-decoration:none}.archive-link:hover{border-color:var(--acc);color:var(--acc)}.archive-link:focus-visible{outline:3px solid #FF6A00;outline-offset:1px}
 button{font:inherit;cursor:pointer}
 .dl{background:#FF6A00;color:#fff;border:0;border-radius:8px;padding:10px 18px;font-weight:700}
 .dl:hover{background:#E65F00}.dl:disabled{opacity:.5;cursor:not-allowed}
@@ -116,7 +117,7 @@ textarea{min-height:64px;resize:vertical}
 </head>
 <body>
 <div class="app"><div>
- <div class="tools"><button class="dl" data-x="png" disabled>Download PNG</button><button class="dl" data-x="pdf" disabled>Download PDF</button><span class="msg" id="msg"></span></div>
+ <div class="tools"><button class="dl" data-x="png" disabled>Download PNG</button><button class="dl" data-x="pdf" disabled>Download PDF</button><a class="archive-link" href="./archives/" aria-label="Browse past Morning Posts">Archives</a><span class="msg" id="msg"></span></div>
  <div class="pvbox"><div id="pvh"><div id="pv"></div></div></div>
 </div></div>
 <div id="xhost"></div>
