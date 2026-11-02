@@ -1,30 +1,34 @@
 param(
     [Parameter(Mandatory = $true)]
-    [string]$ArchivePath
+    [string]$ArchivePath,
+    [string]$PostPath
 )
 
 $ErrorActionPreference = 'Stop'
 $archiveRoot = [System.IO.Path]::GetFullPath($ArchivePath)
 $outputPath = Join-Path $archiveRoot 'index.html'
 $culture = [System.Globalization.CultureInfo]::InvariantCulture
-$styles = @('yyyy-MM-dd', 'MMM d yyyy', 'MMM dd yyyy')
+
+if ($PostPath -and (Test-Path -LiteralPath $PostPath)) {
+    $postContent = [System.IO.File]::ReadAllText($PostPath)
+    $oldArchiveLink = '<a class="archive-link" href="./archives/" aria-label="Browse past Morning Posts">Archives</a>'
+    $postContent = $postContent.Replace($oldArchiveLink, '')
+    [System.IO.File]::WriteAllText($PostPath, $postContent, [System.Text.UTF8Encoding]::new($false))
+}
+
 $records = foreach ($file in Get-ChildItem -LiteralPath $archiveRoot -Filter '*.html' -File) {
     if ($file.Name -eq 'index.html') { continue }
 
     $dateText = $null
-    $formats = @()
     $priority = 99
     if ($file.Name -match '^The Morning post_(\d{4}-\d{2}-\d{2})\.html$') {
         $dateText = $Matches[1]
-        $formats = @('yyyy-MM-dd')
         $priority = 0
     } elseif ($file.Name -match '^The Morning post_(.+)\.html$') {
         $dateText = $Matches[1]
-        $formats = @('MMM d yyyy', 'MMM dd yyyy')
         $priority = 1
     } elseif ($file.Name -match '([A-Za-z]{3} \d{1,2} \d{4})\.html$') {
         $dateText = $Matches[1]
-        $formats = @('MMM d yyyy', 'MMM dd yyyy')
         $priority = 2
     }
 
@@ -90,7 +94,7 @@ $page = @"
   <main>
     <a class="back" href="../">&larr; Today's Morning Post</a>
     <header>
-      <p class="brand">eskillsai Morning Post</p>
+      <p class="brand">eSkillsAI Morning Post</p>
       <h1>Archives</h1>
       <p>Browse previous daily posts.</p>
     </header>

@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="morning-post-shell" content="true">
+  <meta name="description" content="The Morning Post shares daily updates on AI advancements.">
+  <title>The Morning Post | eSkillsAI</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
+  <link rel="stylesheet" href="./site.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-wrap">
+      <a class="brand" href="./">eSkillsAI</a>
+      <div class="hero">
+        <p class="eyebrow">Daily AI advancement news</p>
+        <h1>The Morning Post</h1>
+        <p class="hero-copy">A daily look at the latest developments in artificial intelligence.</p>
+      </div>
+      <nav class="site-nav" aria-label="Main navigation">
+        <a href="./about.html">About</a>
+        <a class="subscribe-link" href="./subscribe.html">Subscribe</a>
+        <a href="./archives/">Archives</a>
+      </nav>
+    </div>
+  </header>
+  <main class="edition" id="today">
+    <div class="edition-heading"><span>Today's edition</span><span>eSkillsAI Morning Post</span></div>
+    <iframe class="post-frame" id="daily-post" src="./today.html" title="Today's Morning Post" scrolling="no"></iframe>
+    <noscript><p>JavaScript is needed to size the daily post correctly. <a href="./today.html">Open today's post</a>.</p></noscript>
+  </main>
+  <footer class="site-footer">The Morning Post by eSkillsAI ? <a href="./archives/">Past editions</a></footer>
+  <script>
+    (function(){
+      const frame=document.getElementById('daily-post');
+      function fit(){
+        try{
+          const doc=frame.contentDocument;
+          if(!doc)return;
+          const height=Math.max(doc.documentElement.scrollHeight,doc.body?doc.body.scrollHeight:0);
+          frame.style.height=Math.max(800,height+24)+'px';
+        }catch(e){}
+      }
+      frame.addEventListener('load',function(){
+        fit();
+        try{
+          const doc=frame.contentDocument;
+          if('ResizeObserver' in window){new ResizeObserver(fit).observe(doc.documentElement);}
+          if(doc.fonts&&doc.fonts.ready){doc.fonts.ready.then(fit);}
+        }catch(e){}
+        setTimeout(fit,500);
+        setTimeout(fit,1500);
+      });
+      window.addEventListener('resize',fit);
+    })();
+  </script>
+</body>
+</html>
