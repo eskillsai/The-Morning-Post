@@ -6,6 +6,7 @@
   <title>Subscribe | The Morning Post</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
   <link rel="stylesheet" href="./site.css">
+  <link rel="alternate" type="application/rss+xml" title="The Morning Post RSS" href="./feed.xml">
 </head>
 <body>
   <header class="site-header">
@@ -27,7 +28,7 @@
     <article class="page-card">
       <h2>Email updates</h2>
       <p>When subscriptions are connected, readers will be able to join the mailing list and receive new editions by email.</p>
-      <div class="notice" role="status">Sign-up is not active yet. The site needs an email service before it can securely collect addresses, send subscriber emails, and notify the publisher about new sign-ups.</div>
+      <div class="notice" role="status">Sign-up is not active yet. MailerLite needs to be connected before the site can collect addresses, email new editions to subscribers, and notify the publisher about sign-ups.</div>
       <form class="signup-form" aria-label="Email subscription form">
         <label for="subscriber-email">Email address</label>
         <input id="subscriber-email" name="email" type="email" placeholder="you@example.com" disabled>
@@ -35,6 +36,6 @@
       </form>
     </article>
   </main>
-  <footer class="site-footer"><a href="./">Today's post</a> ? <a href="./archives/">Past editions</a></footer>
+  <footer class="site-footer"><a href="./">Today's post</a> | <a href="./archives/">Past editions</a> | <a href="./feed.xml">RSS feed</a></footer>
 </body>
 </html>

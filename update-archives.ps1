@@ -38,6 +38,7 @@ $records = foreach ($file in Get-ChildItem -LiteralPath $archiveRoot -Filter '*.
             Date = $parsedDate.Date
             FileName = $file.Name
             Priority = $priority
+            LastWriteTimeUtc = $file.LastWriteTimeUtc
         }
     }
 }
@@ -67,8 +68,9 @@ $page = @"
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Archives - eskillsai Morning Post</title>
+  <title>Archives - eSkillsAI Morning Post</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
+  <link rel="alternate" type="application/rss+xml" title="The Morning Post RSS" href="../feed.xml">
   <style>
     :root{color-scheme:light;--bg:#EEF0F8;--panel:#fff;--ink:#1B1E3A;--muted:#5A5F7D;--line:#DDE0EE;--acc:#7B2CFF}
     *{box-sizing:border-box}
@@ -106,3 +108,42 @@ $items
 </html>
 "@
 [System.IO.File]::WriteAllText($outputPath, $page, [System.Text.UTF8Encoding]::new($false))
+
+$siteRoot = 'https://eskillsai.github.io/The-Morning-Post/'
+$feedPath = Join-Path (Split-Path -Parent $archiveRoot) 'feed.xml'
+$settings = [System.Xml.XmlWriterSettings]::new()
+$settings.Encoding = [System.Text.UTF8Encoding]::new($false)
+$settings.Indent = $true
+$writer = [System.Xml.XmlWriter]::Create($feedPath, $settings)
+try {
+    $writer.WriteStartDocument()
+    $writer.WriteStartElement('rss')
+    $writer.WriteAttributeString('version', '2.0')
+    $writer.WriteStartElement('channel')
+    $writer.WriteElementString('title', 'The Morning Post - eSkillsAI')
+    $writer.WriteElementString('link', $siteRoot)
+    $writer.WriteElementString('description', 'Daily updates on artificial intelligence advancements from eSkillsAI.')
+    $writer.WriteElementString('language', 'en')
+    $writer.WriteElementString('lastBuildDate', [datetime]::UtcNow.ToString('r', $culture))
+    $writer.WriteElementString('generator', 'eSkillsAI Morning Post archive publisher')
+    foreach ($post in $posts) {
+        $encodedName = [System.Uri]::EscapeDataString($post.FileName)
+        $link = $siteRoot + 'archives/' + $encodedName
+        $dateLabel = $post.Date.ToString('MMMM d, yyyy', $culture)
+        $writer.WriteStartElement('item')
+        $writer.WriteElementString('title', 'The Morning Post - ' + $dateLabel)
+        $writer.WriteElementString('link', $link)
+        $writer.WriteStartElement('guid')
+        $writer.WriteAttributeString('isPermaLink', 'true')
+        $writer.WriteString($link)
+        $writer.WriteEndElement()
+        $writer.WriteElementString('pubDate', $post.LastWriteTimeUtc.ToString('r', $culture))
+        $writer.WriteElementString('description', 'Read the full AI advancement news edition on the eSkillsAI Morning Post website.')
+        $writer.WriteEndElement()
+    }
+    $writer.WriteEndElement()
+    $writer.WriteEndElement()
+    $writer.WriteEndDocument()
+} finally {
+    $writer.Dispose()
+}
