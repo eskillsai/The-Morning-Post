@@ -3,10 +3,10 @@
 Split the eskillsai Morning Post Studio into two standalone pages:
 
   editorial.html -> LEFT side  (the editing form)
-  index.html     -> RIGHT side (the live card preview + PNG/PDF download)
+  content.html   -> RIGHT side (the live card preview + PNG/PDF download)
 
 The two pages stay in sync through localStorage / BroadcastChannel:
-edit in editorial.html, and index.html updates live.
+edit in editorial.html, and content.html updates live.
 
 Usage:
     python split_morning_post.py [optional_src_file_path] [out_dir]
@@ -18,7 +18,7 @@ import datetime
 
 # --- FIXED FILENAME LOGIC ---
 if len(sys.argv) > 1:
-    src = pathlib.Path(sys.argv[1])
+    src = pathlib.Path(sys.argv)
 else:
     current_dir = pathlib.Path(".")
     pattern = "eskillsai Morning Post Studio — *.html"
@@ -32,7 +32,7 @@ else:
     src = matching_files[-1]
 
 # Set up output folder
-out = pathlib.Path(sys.argv[2] if len(sys.argv) > 2 else "split_output")
+out = pathlib.Path(sys.argv if len(sys.argv) > 2 else "split_output")
 out.mkdir(parents=True, exist_ok=True)
 
 print(f"Reading source file: {src.name}")
@@ -158,7 +158,7 @@ editor_html = f"""<!DOCTYPE html>
 </html>
 """
 
-# ---------- RIGHT: index.html ----------
+# ---------- RIGHT: content.html ----------
 card = card.replace("fit();persist()}", "fit()}")
 
 dl = dl.replace(
@@ -214,14 +214,7 @@ content_html = f"""<!DOCTYPE html>
 editor_html = editor_html.replace("October 31, 2026", today_str)
 content_html = content_html.replace("October 31, 2026", today_str)
 
-# Write out the backup workspace folder files
 (out / "editorial.html").write_text(editor_html, encoding="utf-8")
-(out / "index.html").write_text(content_html, encoding="utf-8")
-
-# AUTOMATION EXTRA: Write index.html straight into your root repository folder for GitHub Desktop
-root_index_path = src.parent / "index.html"
-root_index_path.write_text(content_html, encoding="utf-8")
-
+(out / "content.html").write_text(content_html, encoding="utf-8")
 print(f"Wrote {out/'editorial.html'}  (left side: editor)")
-print(f"Wrote {out/'index.html'}      (backup preview file)")
-print(f"Wrote {root_index_path.resolve()} (ROOT FILE - Ready for GitHub Desktop!)")
+print(f"Wrote {out/'content.html'}    (right side: preview + downloads)")

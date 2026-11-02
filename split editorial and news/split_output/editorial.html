@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>eskillsai Morning Post - Editorial</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap">
+<style>
+
+:root{--bg:#EEF0F8;--panel:#fff;--ink:#1B1E3A;--muted:#5A5F7D;--line:#DDE0EE;--acc:#7B2CFF;--field:#F6F7FC;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#070921;--panel:#12163F;--ink:#E8EAFB;--muted:#A3A8CF;--line:#272C63;--field:#0C0F32}}
+:root[data-theme="dark"]{--bg:#070921;--panel:#12163F;--ink:#E8EAFB;--muted:#A3A8CF;--line:#272C63;--field:#0C0F32}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Manrope',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;font-size:15px;line-height:1.5}
+.app{display:grid;grid-template-columns:minmax(300px,420px) minmax(0,1fr);gap:20px;max-width:1500px;margin:0 auto;padding:16px}
+@media (max-width:900px){.app{grid-template-columns:minmax(0,1fr)}}
+.tools{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+button{font:inherit;cursor:pointer}
+.dl{background:#FF6A00;color:#fff;border:0;border-radius:8px;padding:10px 18px;font-weight:700}
+.dl:hover{background:#E65F00}.dl:disabled{opacity:.5;cursor:not-allowed}
+.msg{font-size:13px;color:var(--muted)}
+.grp{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.grp h3{margin:0 0 8px;font-size:15px;display:flex;justify-content:space-between;align-items:center}
+.f{display:block;margin-bottom:8px}.f span{display:block;font-size:12px;color:var(--muted);margin-bottom:2px;font-weight:700}
+input[type=text],input:not([type]),textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+textarea{min-height:64px;resize:vertical}
+:is(input,textarea,select,button):focus-visible{outline:3px solid #FF6A00;outline-offset:1px}
+.itm{border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
+.ih{display:flex;justify-content:space-between;font-weight:700;font-size:13px;margin-bottom:6px;color:var(--acc)}
+.x{background:none;border:0;color:var(--muted);font-size:12px;text-decoration:underline;padding:0}
+.b2{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 14px;font-weight:700;margin:4px 6px 12px 0}
+.chk{display:flex;gap:8px;align-items:center;margin-bottom:8px;font-weight:700}.chk input{width:auto}
+.pvbox{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;position:sticky;top:8px}
+@media (max-width:900px){.pvbox{position:static}}
+#pvh{position:relative;overflow:hidden}
+#pv{position:absolute;left:0;top:0;width:1080px;transform-origin:top left}
+#xhost{position:fixed;left:-20000px;top:0;width:1080px}
+.card{width:1080px;min-height:1350px;background:#fff;color:#1B1E3A;font-family:'Manrope',Arial,sans-serif;line-height:1.5;display:flex;flex-direction:column}
+.c-top{display:flex;align-items:center;justify-content:space-between;padding:36px 56px 30px;background:#fff}
+.c-top img{display:block;height:92px;width:auto}
+.c-ed{text-align:right;font-size:26px;color:#5A5F7D;line-height:1.35}.c-ed b{display:block;font-size:32px;color:#0B0F3B;font-weight:800}
+.c-bar{height:10px;background:linear-gradient(90deg,#0A6CFF,#7B2CFF,#FF6A00)}
+.c-hero{background:linear-gradient(135deg,#0B0F3B 0%,#2A1C8F 60%,#7B2CFF 100%);color:#fff;padding:56px 56px 52px}
+.c-tag{display:inline-block;background:#FF6A00;color:#fff;font-weight:700;font-size:24px;padding:4px 22px;border-radius:99px}
+.c-hero h1{font-size:60px;line-height:1.12;margin:24px 0 20px;font-weight:800;letter-spacing:-1px}
+.c-hero p{margin:0;font-size:29px;line-height:1.5;color:#D9DBFF}
+.c-body{padding:16px 56px 40px;flex:1}
+.c-sec{padding-top:34px}
+.c-h{display:flex;align-items:center;gap:16px;font-size:40px;font-weight:800;color:#1B1E3A;margin-bottom:6px}
+.c-h i{display:block;width:10px;height:42px;border-radius:5px}
+.c-it{border-top:2px solid #DDE0EE;padding:22px 0}
+.c-src{font-size:23px;font-weight:700;color:#7B2CFF}
+.c-ih{font-size:33px;line-height:1.3;font-weight:800;color:#1B1E3A;margin:2px 0 6px}
+.c-is{font-size:26px;line-height:1.5;color:#5A5F7D}
+.c-q{margin-top:34px;background:#F4F2FF;border-left:10px solid #FF6A00;border-radius:12px;padding:26px 32px;font-size:28px;color:#1B1E3A}
+.c-q b{display:block;font-size:30px;margin-bottom:4px}
+.c-foot{display:flex;justify-content:space-between;align-items:flex-end;background:#0B0F3B;color:#fff;padding:40px 56px;font-size:28px;font-weight:700}
+.c-cur small{display:block;font-size:22px;font-weight:500;color:#AEB3E8}
+.c-cur b{display:block;font-size:36px;font-weight:800;margin:2px 0 10px}
+.c-cur span{display:block;font-size:20px;font-weight:500;line-height:1.55;color:#D9DBFF}
+.c-cur small>span:first-child{font-size:22px;color:#AEB3E8}
+.c-cur>span{margin-top:14px;font-size:22px;font-weight:700}
+.c-cur>span a{color:#FF8A3D}
+.card a{color:inherit;text-decoration:none}.c-top a{display:block}
+.c-foot>span:last-child{color:#FF8A3D}
+
+/* 1. Hide Blogger's internal hardcoded dates */
+.date-header, .post-timestamp, .post-meta, .post-header-line-1, .header-date { 
+    display: none !important; 
+}
+
+/* 2. Overwrite fixed sizing to force full device mobile scaling responsiveness */
+#pv, .card {
+    max-width: 1080px !important;
+}
+@media (max-width: 1120px) {
+    #pvh {
+        overflow: visible !important;
+        display: flex !important;
+        justify-content: center !important;
+    }
+    #pv, .card {
+        width: 100% !important;
+        min-height: auto !important;
+        transform: none !important;
+        position: relative !important;
+    }
+    .c-top, .c-hero, .c-body, .c-foot {
+        padding: 20px !important;
+    }
+    .c-hero h1 {
+        font-size: 32px !important;
+    }
+    .c-h {
+        font-size: 24px !important;
+    }
+    .c-ih {
+        font-size: 20px !important;
+    }
+    .c-is {
+        font-size: 16px !important;
+    }
+    .c-q {
+        font-size: 16px !important;
+        padding: 15px !important;
+    }
+}
+
+.app{grid-template-columns:minmax(0,1fr);max-width:680px}
+</style>
+</head>
+<body>
+<div class="app"><div><div id="ed"></div></div></div>
+<script>
+
+const LOGO="";
+const COLORS={Purple:"#7B2CFF",Blue:"#0A6CFF",Orange:"#FF6A00",Navy:"#0B0F3B"};
+const KEY="eskillsai-morning-post-v15";
+const sample={"edition":"🌍 TODAY'S AI WORLD. NO FILTER.","date":"Monday, November 2, 2026","tag":"🔥 Breaking Today","headline":"Forum AI finds nearly 40% of election answers from eight chatbots contain factual errors — two days before the US midterms","summary":"A Forum Research study tested eight major AI chatbots on US midterm election questions. Nearly 40% of answers contained material factual errors — wrong candidate names, incorrect policies, fabricated vote counts. Microsoft Copilot cited AI-built Ballot Briefs in 75% of voter questions. ChatGPT cited similar AI summaries in 22%. The AI that was supposed to democratise information is quietly corrupting it, at scale, just before the most consequential vote of 2026.","url":"https://aiweekly.co/ai-news-today","sections":[{"title":"⚠️ AI and the US Midterm Elections","color":"#CC0000","items":[{"src":"Forum Research / AI Weekly","h":"Forum AI finds 40% of election answers from eight chatbots contain factual errors — two days before midterms","s":"A Forum Research study tested eight major AI chatbots on midterm election questions. Nearly 40% of answers had material factual errors — wrong candidate names, incorrect policy positions, and fabricated vote counts. None of the eight chatbots disclosed uncertainty in the answers that were wrong.","u":"https://aiweekly.co/ai-news-today"},{"src":"AI Weekly","h":"OpenAI plans post-midterms Washington blitz pushing mandatory speed limits for the most powerful AI","s":"OpenAI is preparing a major policy push in Washington immediately after the midterm results, proposing that the most powerful frontier AI models be subject to mandatory capability speed limits — a framework that would slow training of any model above a defined compute threshold.","u":"https://aiweekly.co/ai-news-today"},{"src":"Louisville / AI Weekly","h":"Data-centre opponents march on Mayor's home two days before Louisville votes on the Google facility","s":"Louisville residents opposed to a proposed Google data centre marched directly to Mayor Greenberg's home the weekend before the election. AI infrastructure is now a live ballot issue in mid-size US cities.","u":"https://aiweekly.co/ai-news-today"},{"src":"White House OCND","h":"White House refuses to release AI testing framework draft — cites national security and commercial exemptions","s":"The White House declined to publish the full draft of its voluntary AI testing framework, invoking national security and commercial confidentiality exemptions — the framework originally promised as a public document.","u":"https://aiweekly.co/ai-news-today"}]},{"title":"🤖 Models, Products & Launches","color":"#FF6A00","items":[{"src":"xAI / AI Weekly","h":"Musk says Grok bot serving cost was 'unsustainably high relative to revenue' after users burned weekly limits overnight","s":"Elon Musk acknowledged Grok serving costs were unsustainably high after users discovered that auto-running bots could exhaust weekly free limits in hours. xAI is revising pricing tiers and bot-usage caps.","u":"https://aiweekly.co/ai-news-today"},{"src":"OpenAI / AI Weekly","h":"OpenAI caps paid ChatGPT accounts per device and payment card across Go, Plus, and Pro tiers","s":"OpenAI introduced device-level and payment-card-level caps on paid ChatGPT accounts — limiting active accounts per device and card to target account-sharing and bulk-account resellers.","u":"https://aiweekly.co/ai-news-today"},{"src":"Moonshot AI","h":"Kimi K3.1 Pro open weights arrive November 4 — reasoning-optimised version of the 2.8T flagship","s":"Moonshot AI confirmed Kimi K3.1 Pro open weights land November 4, days after Kimi K2 closed to new users. K3.1 Pro is a reasoning-optimised version of K3, the #1 coding benchmark holder. Free to download.","u":"https://aiweekly.co/ai-news-today"},{"src":"Vercel Labs","h":"Vercel Labs opens agent-desktop — AI agents get a full desktop UI environment for computer use","s":"Vercel Labs open-sourced agent-desktop, a framework giving AI agents access to a full desktop UI including browser, file system, and terminal. Agents can now interact with software the way a human user would.","u":"https://aiweekly.co/ai-news-today"}]},{"title":"🔐 Security & Vulnerabilities","color":"#7B2CFF","items":[{"src":"Prefab UI","h":"Prefab UI discloses CVSS 10.0 sandbox escape — LLM-written Python can read and write server files","s":"Prefab UI disclosed the first maximum-severity (CVSS 10.0) sandbox escape in an LLM execution environment. Malicious LLM-written Python could read and write arbitrary server files including credentials and customer data. Patched.","u":"https://aiweekly.co/ai-news-today"},{"src":"Chainalysis","h":"Chainalysis discloses breach by offensive agentic techniques — customer names and emails exposed","s":"Blockchain analytics firm Chainalysis confirmed attackers used offensive agentic AI to breach systems and expose customer names and emails. Attackers used AI agents to find access paths automated scanners had missed.","u":"https://aiweekly.co/ai-news-today"},{"src":"Security Week","h":"www.securityweek.com UEFI flaw hits most servers globally — persistent pre-OS access possible","s":"Critical UEFI firmware vulnerability affects most server hardware worldwide. Exploitation grants persistent pre-OS access surviving OS reinstalls. Enterprise-wide patching will take weeks.","u":"https://www.securityweek.com/in-other-news-anthropic-breach-dispute-uefi-flaw-hits-most-servers-cloudflare-ai-data-leak/"}]},{"title":"💰 Funding & Markets","color":"#0A6CFF","items":[{"src":"Hex Technologies / Peak XV","h":"Hex Technologies raises $100M Series D at $1.2B — rebuilds data platform for AI agents","s":"Data analytics provider Hex raised a $100M Series D led by Peak XV at $1.2B, having rebuilt its platform around AI agents that query, analyse, and visualise data autonomously.","u":"https://llm-stats.com/ai-news"},{"src":"Vera Health / Threshold","h":"Vera Health raises $28.5M — AI medical search used by 800,000+ clinicians in 190 countries","s":"AI medical search engine Vera Health raised $28.5M Series A led by Threshold Ventures. 800,000+ clinicians across 190 countries use it. The clinician-only focus is a direct response to this year's AI medical-advice liability cases.","u":"https://llm-stats.com/ai-news"},{"src":"Hyperbolic / Walden Catalyst","h":"Hyperbolic raises $30M — rents AI compute across 30 neoclouds to cut GPU costs","s":"Hyperbolic raised $30M led by Lip-Bu Tan's Walden Catalyst. The model arbitrages spare compute capacity across 30 neoclouds simultaneously, undercutting single-provider pricing significantly.","u":"https://llm-stats.com/ai-news"},{"src":"Broccoli AI","h":"Broccoli AI raises $52M — AI agents for plumbing, HVAC, and electrical trade contractors","s":"Broccoli AI raised $22M Series A and $30M Series B in quick succession, hitting $300M valuation. Targets physical trade businesses with no software team — a market segment almost entirely ignored by enterprise AI.","u":"https://llm-stats.com/ai-news"}]},{"title":"⚖️ Policy & Society","color":"#0B0F3B","items":[{"src":"EU AI Act","h":"EU AI Act enforcement begins for high-risk systems — first compliance deadlines hit today","s":"Binding EU AI Act compliance deadlines for high-risk AI systems took effect November 1. Systems in hiring, credit, critical infrastructure, and law enforcement now require conformity assessments and human oversight. Fines up to €30M or 6% of global turnover.","u":"https://aiweekly.co/ai-news-today"},{"src":"Microsoft / AFT / UFT","h":"Microsoft, AFT, and UFT AI safety standard for US schools takes effect — bans student-data training and AI companions","s":"The new standard bans training AI on student data, prohibits classroom AI companion apps, and requires human review of AI-generated grades. Over 6,000 US districts covered.","u":"https://aiweekly.co/ai-news-today"},{"src":"NAACP / Federal Court","h":"Federal judge lets NAACP Clean Air Act suit over xAI's 35 Memphis gas turbines proceed","s":"A federal judge allowed the NAACP's Clean Air Act lawsuit over xAI's Memphis data centre to proceed — targeting 35 portable gas turbines deployed without a public permit. First AI lab to face Clean Air Act liability for data centre power.","u":"https://aiweekly.co/ai-news-today"},{"src":"Murata","h":"Murata commits ¥1 trillion to double MLCC output — AI servers burn 15,000-25,000 per rack","s":"Murata will spend ¥1 trillion (~$6.5B) over 5 years to double multilayer ceramic capacitor production. AI servers now require 15,000-25,000 MLCCs per rack — roughly five times a standard server.","u":"https://aiweekly.co/ai-news-today"}]},{"title":"🇮🇳 India: Hyderabad AI Hub & National Infrastructure","color":"#FF6A00","items":[{"src":"Inc42 / TCS HyperVault","h":"TCS HyperVault to invest ₹70,000 crore — India's largest AI data-centre campus in Hyderabad","s":"TCS subsidiary HyperVault secured 264 acres in Hyderabad for a 1 GW AI data-centre campus backed by $2B equity from TCS and TPG. Telangana CM Revanth Reddy confirmed the investment this week. Operational from 2027.","u":"https://inc42.com/buzz/tcs-hypervault-to-invest-%e2%82%b970000-cr-to-set-up-ai-data-centre-in-hyderabad/"},{"src":"DMC Education / AWS India","h":"India's data-centre capacity: 1.57 GW today, 8 GW by 2030 — AWS commits $21B for Hyderabad and Mumbai","s":"India's installed capacity reached 1.57 GW by August 2026, up from 375 MW in 2020. AWS broke ground near Hyderabad as part of a $21B India cloud and AI investment through 2030. Google, NTT DATA, Aurum, and PDG are all building simultaneously.","u":"https://dmc-education.com/2026/10/02/indias-67b-data-centre-boom-the-rise-of-ai-hyperscale-infrastructure-2026-2030/"},{"src":"AM Intelligence / CXO Today","h":"AM Intelligence orders ~30,000 Nvidia Vera Rubin GPUs for Hyderabad — 450 exaFLOPS by Q1 2027","s":"AM Intelligence placed total binding orders for nearly 30,000 Nvidia Vera Rubin GPUs across Hyderabad and Malaysia. The Hyderabad AI factory — Asia's first Vera Rubin cluster at scale — delivers 450 exaFLOPS of NVFP4 inference compute by Q1 2027.","u":"https://cxotoday.com/media-coverage/am-intelligence-to-deploy-one-of-asias-first-nvidia-vera-rubin-clusters-bringing-frontier-ai-compute-to-india/"},{"src":"Inc42 / Ellty","h":"Hyderabad passes Bengaluru as India's top GCC hub — Indian AI startups raised $676M in H1 2026, 4x prior year","s":"Hyderabad overtook Bengaluru as India's leading Global Capability Centre hub in 2026. Indian AI startups raised $676M across 57 deals in H1 2026 — 4x the $162M in H1 2025. Endiya, Anthill, pi Ventures, and Peak XV are the most active investors.","u":"https://inc42.com/lists/top-10-funded-ai-startups-in-hyderabad-2026/"}]},{"title":"🇮🇳 India: Government, Defence & Skills","color":"#7B2CFF","items":[{"src":"Inc42 / Vaishnaw","h":"India to attract $200B in AI investments in two years — government orders 20,000 more GPUs","s":"Minister Vaishnaw announced $200B in projected AI investment inflows over two years at India AI Impact Summit 2026. New order for 20,000 GPUs confirmed. IndiaAI Mission has onboarded 45,000+ GPUs and allocated Rs 2,000 crore for AI startups.","u":"https://inc42.com/buzz/india-to-attract-200-bn-in-ai-investments-in-two-years-ashwini-vaishnaw/"},{"src":"VARINDIA / MediaNama","h":"Sarvam AI signs five-year defence MoU — AI tools for Army, Navy, and Air Force","s":"Sarvam's MoU with HQ Integrated Defence Staff covers decision support, target acquisition, and data fusion using Sarvam 105B and the Chanakya defence unit. First Indian AI lab with a multi-service defence framework agreement.","u":"https://www.varindia.com/news/sarvam-to-build-ai-tools-for-all-three-armed-forces-under-five-year-defence-mou"},{"src":"Maharashtra CMO","h":"Maharashtra deploys Sarvam sovereign AI workspace on 2,500 officials' desks","s":"Maharashtra officials now use Sarvam's AI workspace for document drafting, report analysis, and file summarisation — making it one of India's largest adopters of generative AI in state administration.","u":"https://ministryofcyberaffairs.com/news/maharashtra-puts-sarvam-s-sovereign-ai-on-2-500-officials-desks-as-indian-governments-turn-to-home-grown-ai-ae0ba4d6-aa62-4697-b99d-8cf9a23e7515"},{"src":"People Matters","h":"Indian IT hiring splits: HCLTech adds 6,450, Wipro sheds 6,716 — AI deflation hits contract renewals","s":"HCLTech grew to 230,339, Infosys to 332,542, while Wipro fell 2.8% to 236,328. AI cost give-backs are now written into IT renewals — structural deflation benefiting clients but squeezing vendor margins.","u":"https://www.peoplematters.in/amp/news/business/indian-it-hiring-in-q2-hcltech-adds-6450-employees-as-wipro-loses-6716-52954"},{"src":"SAP India / AIM","h":"SAP India targets 2 million people for AI and cloud skilling by 2030 — 13% already enrolled","s":"SAP India's skilling plan covers AI, cloud, data, and enterprise tech across 18 Indian states. India accounts for 48% of SAP's certified learners worldwide.","u":"https://analyticsindiamag.com/ai-news/sap-india-targets-2-million-people-for-ai-skilling-by-2030"}]},{"title":"📚 Learn AI Today — Free","color":"#0A6CFF","items":[{"src":"Anthropic / academy.claude.com","h":"Claude Academy: 26 free courses from zero to the API — available in Hindi","s":"Anthropic's free platform covers AI Fluency, Claude Code, MCP, and API in four tracks. Available in Hindi. LinkedIn-shareable certificates. No subscription.","u":"https://pasqualepillitteri.it/en/news/12081/claude-academy-live-free-courses-learn-claude"},{"src":"Anthropic","h":"Anthropic Frontier Academy: $100M to train 10,000 engineers — applications open November 15","s":"The largest single frontier AI education commitment by any lab. Open to applicants globally. 10,000 seats. Applications open in 13 days.","u":"https://pasqualepillitteri.it/en/news/cat/723"}]}],"qOn":true,"qTitle":"💡 Question of the day","q":"40% of AI answers about the election are factually wrong. The White House won't share its own AI testing framework. A CVSS 10.0 sandbox escape lets AI-written code access your server. And AI coding agents are shipping five times the output with one fifth of the developers. We are two days from the most AI-saturated midterm election in US history. Is AI making democracy stronger — or quietly breaking it?","curated":"Curated by\nDr. G.S. Bapi Raju\nFounder & CEO, eskillsai.com\nFormer Professor, Computer Science & Engg.\nPh.D, M.Tech (CSE), M.Sc (Nuclear Physics), MBA (HR & FIN),\nIDCPA, NCC (UK) | MCSE | CCNA | AWS | PCCET\nLife Member: CSI & ISTE","site":"eskillsai.com"};
+const clone=o=>JSON.parse(JSON.stringify(o));
+function load(){try{const v=localStorage.getItem(KEY);return v?JSON.parse(v):null}catch(e){return null}}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+let S=load()||clone(sample);
+const $=s=>document.querySelector(s), ed=$("#ed");
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const today=()=>new Date().toLocaleDateString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
+const bc=(()=>{try{return new BroadcastChannel(KEY)}catch(e){return null}})();
+function render(){persist();if(bc)bc.postMessage("u")}
+const fld=(l,h)=>`<label class="f"><span>${l}</span>${h}</label>`;
+const inp=(a,v)=>`<input type="text" ${a} value="${esc(v)}">`;
+const ta=(a,v)=>`<textarea ${a}>${esc(v)}</textarea>`;
+function buildEditor(){
+ ed.innerHTML=`<div class="grp"><h3>Header</h3>${fld("Edition name",inp('data-k="edition"',S.edition))}${fld("Date",inp('data-k="date"',S.date))}</div>
+ <div class="grp"><h3>Lead story</h3>${fld("Label",inp('data-k="tag"',S.tag))}${fld("Headline",ta('data-k="headline"',S.headline))}${fld("Summary",ta('data-k="summary" style="min-height:110px"',S.summary))}${fld("Link (optional)",inp('data-k="url"',S.url))}</div>`+
+ S.sections.map((sc,si)=>`<div class="grp"><h3>Section ${si+1}<button class="x" data-a="delSec" data-si="${si}">Remove section</button></h3>${fld("Heading",inp(`data-si="${si}" data-f="title"`,sc.title))}
+ <label class="f"><span>Colour</span><select data-si="${si}" data-f="color">${Object.entries(COLORS).map(([n,v])=>`<option value="${v}"${v===sc.color?" selected":""}>${n}</option>`).join("")}</select></label>`+
+ sc.items.map((it,ii)=>`<div class="itm"><div class="ih">Story ${ii+1}<button class="x" data-a="delItem" data-si="${si}" data-ii="${ii}">Remove</button></div>${fld("Source (optional)",inp(`data-si="${si}" data-ii="${ii}" data-f="src"`,it.src))}${fld("Headline",ta(`data-si="${si}" data-ii="${ii}" data-f="h" style="min-height:52px"`,it.h))}${fld("Summary (optional)",ta(`data-si="${si}" data-ii="${ii}" data-f="s"`,it.s))}${fld("Link (optional)",inp(`data-si="${si}" data-ii="${ii}" data-f="u"`,it.u))}</div>`).join("")+
+ `<button class="b2" data-a="addItem" data-si="${si}">Add story</button></div>`).join("")+
+ `<button class="b2" data-a="addSec">Add section</button>
+ <div class="grp"><h3>Question box</h3><label class="chk"><input type="checkbox" data-k="qOn"${S.qOn?" checked":""}> Show this box</label>${fld("Title",inp('data-k="qTitle"',S.qTitle))}${fld("Text",ta('data-k="q"',S.q))}</div>
+ <div class="grp"><h3>Footer</h3>${fld("Curator block (one line per row)",ta('data-k="curated" style="min-height:150px"',S.curated))}${fld("Right text",inp('data-k="site"',S.site))}</div>
+ <button class="b2" data-a="clear">Clear all text</button><button class="b2" data-a="reset">Restore sample</button>`;
+}
+function onEdit(e){const t=e.target,d=t.dataset;
+ if(d.k){S[d.k]=t.type==="checkbox"?t.checked:t.value}
+ else if(d.ii!==undefined){S.sections[d.si].items[d.ii][d.f]=t.value}
+ else if(d.si!==undefined&&d.f){S.sections[d.si][d.f]=t.value}
+ else return; render()}
+ed.addEventListener("input",onEdit);ed.addEventListener("change",onEdit);
+ed.addEventListener("click",e=>{const b=e.target.closest("[data-a]");if(!b)return;const d=b.dataset,si=+d.si,ii=+d.ii,a=d.a;
+ if(a==="addItem")S.sections[si].items.push({src:"",h:"",s:"",u:""});
+ else if(a==="delItem")S.sections[si].items.splice(ii,1);
+ else if(a==="addSec")S.sections.push({title:"New section",color:"#0A6CFF",items:[{src:"",h:"",s:"",u:""}]});
+ else if(a==="delSec")S.sections.splice(si,1);
+ else if(a==="reset"){if(!confirm("Replace everything with the sample issue?"))return;S=clone(sample)}
+ else if(a==="clear"){if(!confirm("Clear all text and keep the layout?"))return;S.date=today();S.tag="";S.headline="";S.summary="";S.url="";S.q="";S.sections.forEach(s=>s.items=[{src:"",h:"",s:"",u:""}])}
+ buildEditor();render()});
+
+
+buildEditor();render();
+
+</script>
+</body>
+</html>
