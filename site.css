@@ -54,6 +54,19 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(-
   .home-content-surface .edition-heading{font-size:11px}
 }
 
+pre {
+  /* 1. Changes it from monospace back to your custom font */
+  font-family: 'Manrope', sans-serif; 
+  
+  /* 2. Forces it to match your normal website text size */
+  font-size: 16px; 
+}
+
+
+
+
+
+
 /* Morning Post archive reader */
 .archive-body{min-height:100vh;background:radial-gradient(circle at 88% 4%,rgba(123,44,255,.08),transparent 25%),var(--bg);--archive-accent-soft:#f2efff;--archive-rail:#fbfcff;--archive-frame:#e7eaf2}
 .archive-shell{width:min(1320px,calc(100% - 48px));margin:0 auto;padding:18px 0 48px}
